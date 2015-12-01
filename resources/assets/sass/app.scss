@@ -1,18 +1,17 @@
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
 @mixin background-gradient($angle, $color1, $color2) {
-    background: -webkit-linear-gradient($angle, $color1, $color2); /* Chrome 10+, Saf5.1+ */
-    background:    -moz-linear-gradient($angle, $color1, $color2); /* FF3.6+ */
-    background:     -ms-linear-gradient($angle, $color1, $color2); /* IE10 */
-    background:      -o-linear-gradient($angle, $color1, $color2); /* Opera 11.10+ */
-    background:         linear-gradient($angle, $color1, $color2); /* W3C */
+    background: $color1; /* fallback for old browsers */
+    background: -webkit-linear-gradient($angle, $color1, $color2); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient($angle, $color1 , $color2); /* W3C,IE 10+,Edge,Firefox 16+,Chrome 26+,Opera 12+,Safari 7+ */
 }
 
 body {
-    @include background-gradient(90deg, #d0d0d0 20%, #636E74 100%);
+    @include background-gradient(to left, #43cea2 20%, #185a9d);
 }
-p,h1 {
-    color:#222;
+
+.logo, .logo small {
+    color:white;
 }
 .spacing {
     padding-top:0px;
