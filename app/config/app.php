@@ -122,6 +122,11 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
+		/*
+		 * Packages to the Test App
+		 */
+		'Artdarek\OAuth\OAuthServiceProvider',
+
 	),
 
 	/*
@@ -189,6 +194,10 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
 
+		/*
+		 * Aliases for the Test App packages
+		 */
+		'OAuth'           => 'Artdarek\OAuth\Facade\OAuth',
 	),
 
 );

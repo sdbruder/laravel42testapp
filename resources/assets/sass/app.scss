@@ -1,5 +1,113 @@
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+@mixin background-gradient($angle, $color1, $color2) {
+    background: -webkit-linear-gradient($angle, $color1, $color2); /* Chrome 10+, Saf5.1+ */
+    background:    -moz-linear-gradient($angle, $color1, $color2); /* FF3.6+ */
+    background:     -ms-linear-gradient($angle, $color1, $color2); /* IE10 */
+    background:      -o-linear-gradient($angle, $color1, $color2); /* Opera 11.10+ */
+    background:         linear-gradient($angle, $color1, $color2); /* W3C */
+}
+
 body {
-    padding-top: 80px;
+    @include background-gradient(90deg, #d0d0d0 20%, #636E74 100%);
+}
+p,h1 {
+    color:#222;
+}
+.spacing {
+    padding-top:0px;
+    padding-bottom:7px;
+}
+.middlePage {
+    width: 680px;
+    height: 500px;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+
+.btn-fb {
+    color: #fff;
+    border: 1px solid #102e6d;
+    text-shadow: 0px -1px 0px #194ab0;
+    -webkit-box-shadow: inset 0 1px 0 #3b5998, 0px 1px 3px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0 1px 0 #3b5998, 0px 1px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px 0 #3b5998, 0px 1px 3px rgba(0, 0, 0, 0.2);
+    background: #133783;
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #133783), color-stop(1, #3b5998));
+    background: -ms-linear-gradient(bottom, #133783, #3b5998);
+    background: -moz-linear-gradient(center bottom, #133783 0%, #3b5998 100%);
+    background: -o-linear-gradient(#3b5998, #133783);
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3b5998', endColorstr='#133783', GradientType=0);
+    -webkit-transition: all border linear 0.2s, box-shadow linear 0.2s, background linear 0.2s ease-out;
+    -moz-transition: all border linear 0.2s, box-shadow linear 0.2s, background linear 0.2s ease-out;
+    -o-transition: all border linear 0.2s, box-shadow linear 0.2s, background linear 0.2s ease-out;
+    transition: all border linear 0.2s, box-shadow linear 0.2s, background linear 0.2s ease-out
+}
+
+.btn-fb:hover {
+    background: #133783;
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #102e6d), color-stop(1, #344e86));
+    background: -ms-linear-gradient(bottom, #102e6d, #344e86);
+    background: -moz-linear-gradient(center bottom, #102e6d 0%, #344e86 100%);
+    background: -o-linear-gradient(#344e86, #102e6d);
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#344e86', endColorstr='#102e6d', GradientType=0);
+}
+
+.btn-fb:active, .btn-fb.active {
+    text-shadow: 0px -1px 0px #091b40;
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0px 1px 3px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0px 1px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0px 1px 3px rgba(0, 0, 0, 0.2);
+    background: #133783;
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #091b40), color-stop(1, #263961));
+    background: -ms-linear-gradient(bottom, #091b40, #263961);
+    background: -moz-linear-gradient(center bottom, #091b40 0%, #263961 100%);
+    background: -o-linear-gradient(#263961, #091b40);
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#263961', endColorstr='#091b40', GradientType=0);
+}
+
+.btn-github {
+    color: #fff;
+    border: 1px solid #151515;
+    text-shadow: 0px -1px 0px #3c3c3c;
+    -webkit-box-shadow: inset 0 1px 0 #555555, 0px 1px 3px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0 1px 0 #555555, 0px 1px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px 0 #555555, 0px 1px 3px rgba(0, 0, 0, 0.2);
+    background: #222;
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #222), color-stop(1, #444));
+    background: -ms-linear-gradient(bottom, #222, #444);
+    background: -moz-linear-gradient(center bottom, #222 0%, #444 100%);
+    background: -o-linear-gradient(#444, #222);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#444', endColorstr='#222', GradientType=0);
+    -webkit-transition: all border linear 0.2s, box-shadow linear 0.2s, background linear 0.2s ease-out;
+    -moz-transition: all border linear 0.2s, box-shadow linear 0.2s, background linear 0.2s ease-out;
+    -o-transition: all border linear 0.2s, box-shadow linear 0.2s, background linear 0.2s ease-out;
+    transition: all border linear 0.2s, box-shadow linear 0.2s, background linear 0.2s ease-out
+}
+
+.btn-github:hover {
+    background: #222;
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #151515), color-stop(1, #373737));
+    background: -ms-linear-gradient(bottom, #151515, #373737);
+    background: -moz-linear-gradient(center bottom, #151515 0%, #373737 100%);
+    background: -o-linear-gradient(#373737, #151515);
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#373737', endColorstr='#151515', GradientType=0);
+}
+
+.btn-github:active, .btn-github.active {
+    text-shadow: 0px -1px 0px #000;
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0px 1px 3px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0px 1px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0px 1px 3px rgba(0, 0, 0, 0.2);
+    background: #222;
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #000), color-stop(1, #1e1e1e));
+    background: -ms-linear-gradient(bottom, #000, #1e1e1e);
+    background: -moz-linear-gradient(center bottom, #000 0%, #1e1e1e 100%);
+    background: -o-linear-gradient(#1e1e1e, #000);
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1e1e1e', endColorstr='#000', GradientType=0);
 }
