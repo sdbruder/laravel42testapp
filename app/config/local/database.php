@@ -22,13 +22,14 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'homestead',
+			'host'      => 'homestead',
+			'database'  => 'test',
 			'username'  => 'homestead',
 			'password'  => 'secret',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
+			'strict'    => true
 		),
 
 		'pgsql' => array(
