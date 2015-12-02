@@ -14,6 +14,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <p>Lorem ipsum.</p>
+                    <p><a href="/auth/login">Login page</a></p>
                     @if (Auth::check())
                         <p>
                             <b>Authenticated user:</b> {{ Auth::user()->email }}
