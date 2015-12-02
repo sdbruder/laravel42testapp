@@ -2,6 +2,12 @@
 
 class AuthController extends \BaseController {
 
+	// URL to redirect to when logged in with success.
+	public $redirectTo = '/contact';
+
+	// login URL.
+	public $loginURL = '/auth/login';
+
 	/**
 	 * get Login Form.
 	 *
@@ -36,9 +42,9 @@ class AuthController extends \BaseController {
 	public function doLogin($input)
 	{
 		if (Auth::attempt(['email' => $input['email'], 'password' => $input['password'], 'provider' => 'email'])) {
-			return Redirect::to('/');
+			return Redirect::to($this->redirectTo);
 		} else {
-			return Redirect::to('/auth/login')->with('message', 'User not found or password incorrect.');
+			return Redirect::to($this->loginURL)->with('message', 'User not found or password incorrect.');
 		}
 	}
 
@@ -58,9 +64,9 @@ class AuthController extends \BaseController {
 			]);
 			$user->save();
 			Auth::login($user);
-			return Redirect::to('/');
+			return Redirect::to($this->redirectTo);
 		} else {
-			return Redirect::to('/auth/login')->with('message', 'User already exists.');
+			return Redirect::to($this->loginURL)->with('message', 'User already exists.');
 		}
 	}
 
@@ -129,7 +135,7 @@ class AuthController extends \BaseController {
 			$user = User::where('provider', '=', $driver)->where('provider_id', '=', $result['id'])->get()->toArray();
 			if ($user) {
 				Auth::loginUsingId($user[0]['id']);
-				return Redirect::to('/');
+				return Redirect::to($this->redirectTo);
 			} else {
 				if (User::where('email', '=', $result['email'])->count() == 0) {
 					$user = User::create([
@@ -140,13 +146,13 @@ class AuthController extends \BaseController {
 					]);
 					$user->save();
 					Auth::login($user);
-					return Redirect::to('/');
+					return Redirect::to($this->redirectTo);
 				} else {
-					return Redirect::to('/auth/login')->with('message', 'User with the same email already exists.');
+					return Redirect::to($this->loginURL)->with('message', 'User with the same email already exists.');
 				}
 			}
 		} else {
-			return Redirect::to('/')->with('message', 'OAuth login attempt without corresponding code.');
+			return Redirect::to($this->loginURL)->with('message', 'OAuth login attempt without corresponding code.');
 		}
 	}
 
