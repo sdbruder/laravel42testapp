@@ -18,7 +18,8 @@ elixir(function(mix) {
         'public/fonts/bootstrap/')
     .scripts([
         'jquery.js',
-        'bootstrap.js'
+        'bootstrap.js',
+        'contact.js'
         ])
     .sass('app.scss','resources/assets/css')
     .styles([

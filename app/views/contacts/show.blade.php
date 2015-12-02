@@ -19,7 +19,7 @@
                         that property isnt applying --}}
                     <form id="search-form" class="form-inline pull-right" role="form" style="display: inline; margin-bottom: 0px !important;">
                     <div class="input-group">
-                    <input type="text" class="form-control search-form" placeholder="Search">
+                    <input type="text" class="form-control search-form" id="searchInput" placeholder="Search">
                     <span class="input-group-btn">
                         <button type="submit" class="btn btn-primary search-btn" data-target="#search-form" name="q">
                         <span class="glyphicon glyphicon-search"></span>
@@ -53,9 +53,10 @@
                             <tr>
                                 <th>
                                     <span class="table-btns">
-                                    <button id="deleteContact" class="btn btn-primary btn-sm">
+                                    <button data-id="{{ $c->id }}" class="btn btn-primary btn-sm btnEdit">
                                         <span class="glyphicon glyphicon-pencil"></span>
-                                    </button>&nbsp;<button id="deleteContact" class="btn btn-danger btn-sm">
+                                    </button>
+                                    <button data-id="{{ $c->id }}" class="btn btn-danger btn-sm btnDelete">
                                         <span class="glyphicon glyphicon-trash"></span>
                                     </button>
                                     </span>
@@ -77,4 +78,10 @@
 @stop
 
 @section('javascript')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // /resources/assets/js/contact.js
+            contactIndex_setup();
+        });
+    </script>
 @stop

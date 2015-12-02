@@ -27,6 +27,8 @@ class CreateContactsTable extends Migration {
 			$table->string('field5');
 			$table->timestamps();
 		});
+
+		DB::statement('ALTER TABLE contacts ADD FULLTEXT full (name, surname, email, phone, field1, field2, field3, field4, field5)');
 	}
 
 	/**
@@ -36,6 +38,9 @@ class CreateContactsTable extends Migration {
 	 */
 	public function down()
 	{
+		Schema::table('contacts', function($table) {
+			$table->dropIndex('full');
+		});
 		Schema::drop('contacts');
 	}
 

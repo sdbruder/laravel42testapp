@@ -9,8 +9,12 @@ class ContactsController extends \BaseController {
 	 */
 	public function index()
 	{
-		$contacts = Auth::User()->contacts()->get();
-		return View::make('contacts.show')->with('contacts',$contacts);
+		if (Auth::User()) {
+			$contacts = Auth::User()->contacts()->get();
+			return View::make('contacts.show')->with('contacts',$contacts);
+		} else {
+			return Redirect::to('/auth/login')->with('message', 'You need to be logged in to view contacts');
+		}
 	}
 
 
@@ -81,6 +85,44 @@ class ContactsController extends \BaseController {
 	public function destroy($id)
 	{
 		dd("delete contact $id");
+	}
+
+
+	/**
+	 * 'asterisk' the search items to better FT search them.
+	 *
+	 * @param  string  $search
+	 * @return JSON
+	 */
+	public function asteriskIt($words)
+	{
+		$wordList = explode(' ',$words);
+		$searchList = [];
+		foreach($wordList as $w) {
+			$searchList[] = trim($w).'*';
+		}
+		return implode(' ',$searchList);
+	}
+
+
+	/**
+	 * AJAX Search method
+	 *
+	 * @param  string  $search
+	 * @return JSON
+	 */
+	public function search()
+	{
+		$input = Input::all();
+		if (array_key_exists('search', $input) && $input['search']) {
+			$search = $this->asteriskIt($input['search']);
+			$contacts = Auth::User()->contacts()->whereRaw(
+				'MATCH (name, surname, email, phone, field1, field2, field3, field4, field5) AGAINST ("'.$search.'" IN BOOLEAN MODE)'
+				)->get()->toArray();
+		} else {
+			$contacts = Auth::User()->contacts()->get()->toArray();
+		}
+		return Response::json($contacts);
 	}
 
 
