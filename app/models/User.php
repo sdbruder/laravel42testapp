@@ -39,4 +39,14 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		'password'
 	);
 
+	/*
+	 * A User has many contacts
+	 *
+	 * @return Contact
+	 */
+	public function contacts()
+	{
+		return $this->hasMany('Contact');
+	}
+
 }

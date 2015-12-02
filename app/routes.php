@@ -26,3 +26,7 @@ Route::get('/', function()
  // OAuth Authentication routes
  Route::get('auth/{driver}',          'AuthController@redirectToProvider'    );
  Route::get('auth/{driver}/callback', 'AuthController@handleProviderCallback');
+
+ // Contacts controller
+ Route::resource('contact', 'ContactsController');
+
