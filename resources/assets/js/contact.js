@@ -200,7 +200,6 @@ function prepDeleteModal() {
         if (response[0] == 'ok') {
             ef = extraFields(response[1]);
             ef = ef.length ? ' '+ef : '';
-            console.log(response[1]);
             $("#bodyModalDelete").html(
                 "<p>Do you really want to delete contact:<br/>"+
                 "<b>"+response[1]['name']+" "+response[1]['surname']+" "+
