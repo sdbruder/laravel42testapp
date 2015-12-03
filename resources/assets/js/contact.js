@@ -49,12 +49,13 @@ function extraFields(row) {
  * Enormous multi-line strings!
  * Ugh! HTML MIXED IN JAVASCRIPT CODE!
  * Really, really UGLY. There is a cleaner way to do it ?
+ * TODO: investigate JSON2HTML.COM if it can help.
  * </WARNING!WARNING!WARNING!WARNING!WARNING!WARNING!WARNING!WARNING!WARNING!>
  */
 function tableIt(response) {
     table_str = '';
     response.forEach(function(row,idx,list){
-        extra = extraFields(row);
+        list[idx].extra = extraFields(row);
         table_str = table_str +
             "<tr>\n" +
                 "<th>\n"+
@@ -70,7 +71,7 @@ function tableIt(response) {
                 "<th>" + row.name  + " " + row.surname + "</th>\n"+
                 "<td>" + row.email + "</td>\n"+
                 "<td>" + row.phone + "</td>\n"+
-                "<td>" + extra     + "</td>\n"+
+                "<td>" + row.extra + "</td>\n"+
             "</tr>\n";
     });
     $('#tableBody').html(table_str);
@@ -79,22 +80,108 @@ function tableIt(response) {
 
 var searchTimeout = null;
 
-function doSearch() {
+function doSearch(time) {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(function(){
         doAjax('/contact/search', $('#searchInput'), {search: $('#searchInput').val()},
         function(response) {
             tableIt(response);
         });
-    }, 700);
+    }, time);
+    return false;
 }
 
 
+function callModal(modalId, ev) {
+    $(modalId).data('id',  $(ev.currentTarget).data('id') );
+    $(modalId).modal([]);
+}
+
+function prepInsertModal() {
+    console.log('prepInsertModal');
+    $('#insertMessage').addClass('hidden');
+    $('#formIM :input.clear').each( function(){ $(this).val(''); } );
+    for (var i = 1; i <= 5; ++i) $('#fieldInsert'+i).addClass('hidden');
+    $('#extraBtnsIM').data('show', 0);
+    console.log($('#formIM :input.clear'));
+}
+
+function insertButtonInsertModal() {
+    doAjax('/contact', $('#formIM'), $('#formIM').serialize(),
+        function(response) {
+            if (response[0] == 'ok') {
+                doSearch(0);
+                $('#insertModal').modal('hide');
+            } else {
+                errors = '';
+                for(k in response[1]) {
+                    errors += "<li>"+response[1][k][0]+"</li>\n";
+                }
+                $('#insertMessage').html("<ul>"+errors+"</ul>");
+                $('#insertMessage').removeClass('hidden');
+            }
+            console.log(response)
+        });
+    return false;
+}
+
+function closeButtonInsertModal() {
+}
+
+function extraInsertModal(change) {
+    if (change == 1) {
+        show = $('#extraBtnsIM').data('show');
+        show += 1;
+        $('#fieldInsert'+show).removeClass('hidden');
+        $('#extraBtnsIM').data('show', show);
+    } else {
+        show = $('#extraBtnsIM').data('show');
+        $('#fieldInsert'+show).addClass('hidden');
+        show -= 1;
+        $('#extraBtnsIM').data('show', show);
+    }
+}
+
+function prepEditModal() {
+}
+
+function updateButtonEditModal() {
+}
+
+function closeButtonEditModal() {
+}
+
+function prepDeleteModal() {
+}
+
+function deleteButtonDeleteModal() {
+}
+
+function cancelButtonDeleteModal() {
+}
+
 function contactIndex_setup() {
     // setup all events
-    $('#searchInput').keyup(function() { doSearch(); });
-    $('.btnEdit').click(    function(ev) { alert(ev); });
-    $('.btnDelete').click(  function(ev) { alert(ev); });
+    $('#search-form').submit(function()  { return doSearch(0);              });
+    $('#searchInput').keyup(function()   { doSearch(700);                   });
+    $('.btnEdit').click(    function(ev) { callModal('#editModal',   ev);   });
+    $('.btnDelete').click(  function(ev) { callModal('#deleteModal', ev);   });
+
+    $('#insertModal').on('show.bs.modal', function (e) { prepInsertModal(); });
+    $('#insertBtnIM').click( function(ev) { insertButtonInsertModal(); });
+    $('#formIM').submit(     function(ev) { return insertButtonInsertModal(); });
+    $('#closeBtnIM').click(  function(ev) { closeButtonInsertModal();  });
+    $('#plusBtnIM').click(   function(ev) { extraInsertModal(+1);      });
+    $('#minusBtnIM').click(  function(ev) { extraInsertModal(-1);      });
+
+    $('#editModal').on(  'show.bs.modal', function (e) { prepEditModal();   });
+    $('#updateBtnEM').click( function(ev) { updateButtonEditModal(); });
+    $('#closeBtnEM').click(  function(ev) { closeButtonEditModal();  });
+
+    $('#deleteModal').on('show.bs.modal', function (e) { prepDeleteModal(); });
+    $('#deleteBtnDM').click( function(ev) { deleteButtonDeleteModal(); });
+    $('#cancelBtnDM').click( function(ev) { cancelButtonDeleteModal(); });
+
 }
 
 

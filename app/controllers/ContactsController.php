@@ -36,7 +36,21 @@ class ContactsController extends \BaseController {
 	 */
 	public function store()
 	{
-		dd('store contact');
+		$rules = [
+			'name'      => 'required:min:3',
+			'surname'   => 'required:min:3',
+			'email'     => 'required|email',
+			'phone'     => 'required'
+		];
+		$validator = Validator::make(Input::all(), $rules);
+		if ($validator->fails()) {
+			return Response::json( ['error',$validator->messages()] );
+			return Redirect::to('register')->withErrors($validator);
+		} else {
+			$contact = new Contact(Input::all());
+			Auth::User()->contacts()->save($contact);
+			return Response::json( ['ok',''] );
+		}
 	}
 
 
