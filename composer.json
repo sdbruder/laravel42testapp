@@ -6,13 +6,15 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 		"components/jquery": "^2.1",
-		"artdarek/oauth-4-laravel": "dev-master"
+		"artdarek/oauth-4-laravel": "dev-master",
+		"pda/pheanstalk": "~2.1"
 	},
 	"autoload": {
 		"classmap": [
 			"app/commands",
 			"app/controllers",
 			"app/models",
+			"app/workers",
 			"app/database/migrations",
 			"app/database/seeds",
 			"app/tests/TestCase.php"

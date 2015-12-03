@@ -49,6 +49,7 @@ class ContactsController extends \BaseController {
 		} else {
 			$contact = new Contact(Input::all());
 			Auth::User()->contacts()->save($contact);
+			Queue::push('activeCampaignWorker@storeProcess', $contact);
 			return Response::json( ["ok",""] );
 		}
 	}
@@ -98,6 +99,7 @@ class ContactsController extends \BaseController {
 				return Response::json( ["error",$validator->messages()] );
 			} else {
 				$contact->update(Input::all());
+				Queue::push('activeCampaignWorker@updateProcess', $contact);
 				return Response::json(["ok",""]);
 			}
 		} else {
@@ -117,6 +119,7 @@ class ContactsController extends \BaseController {
 		$contact = Contact::findOrFail($id);
 		if ($contact->user->id == Auth::User()->id) {
 			$contact->delete();
+			Queue::push('activeCampaignWorker@deleteProcess', $contact);
 			return Response::json(["ok",""]);
 		} else {
 			return Response::json(["error","Contact doesn't exist or not from the authenticaded user."]);
