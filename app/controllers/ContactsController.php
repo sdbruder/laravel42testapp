@@ -45,7 +45,6 @@ class ContactsController extends \BaseController {
 		$validator = Validator::make(Input::all(), $rules);
 		if ($validator->fails()) {
 			return Response::json( ['error',$validator->messages()] );
-			return Redirect::to('register')->withErrors($validator);
 		} else {
 			$contact = new Contact(Input::all());
 			Auth::User()->contacts()->save($contact);

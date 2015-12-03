@@ -91,6 +91,14 @@ function doSearch(time) {
     return false;
 }
 
+function errMessages(msgs,div) {
+    errors = '';
+    for(k in msgs) {
+        errors += "<li>"+msgs[k][0]+"</li>\n";
+    }
+    $(div).html("<ul>"+errors+"</ul>");
+    $(div).removeClass('hidden');
+}
 
 function callModal(modalId, ev) {
     $(modalId).data('id',  $(ev.currentTarget).data('id') );
@@ -111,14 +119,8 @@ function insertButtonInsertModal() {
                 doSearch(0);
                 $('#insertModal').modal('hide');
             } else {
-                errors = '';
-                for(k in response[1]) {
-                    errors += "<li>"+response[1][k][0]+"</li>\n";
-                }
-                $('#insertMessage').html("<ul>"+errors+"</ul>");
-                $('#insertMessage').removeClass('hidden');
+                errMessages(response[1],'#insertMessage');
             }
-            console.log(response)
         });
     return false;
 }
@@ -165,10 +167,9 @@ function contactIndex_setup() {
     $('.btnEdit').click(    function(ev) { callModal('#editModal',   ev);   });
     $('.btnDelete').click(  function(ev) { callModal('#deleteModal', ev);   });
 
-    $('#insertModal').on('show.bs.modal', function (e) { prepInsertModal(); $('#firstIM').focus(); });
+    $('#insertModal').on('show.bs.modal', function (e) { prepInsertModal();      });
     $('#insertModal').on('shown.bs.modal', function (e) { $('#firstIM').focus(); });
 
-    $('#insertBtnIM').click( function(ev) { insertButtonInsertModal(); });
     $('#formIM').submit(     function(ev) { return insertButtonInsertModal(); });
     $('#closeBtnIM').click(  function(ev) { closeButtonInsertModal();  });
     $('#plusBtnIM').click(   function(ev) { extraInsertModal(+1);      });
