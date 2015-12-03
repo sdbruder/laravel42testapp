@@ -114,7 +114,13 @@ class ContactsController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		dd("delete contact $id");
+		$contact = Contact::findOrFail($id);
+		if ($contact->user->id == Auth::User()->id) {
+			$contact->delete();
+			return Response::json(["ok",""]);
+		} else {
+			return Response::json(["error","Contact doesn't exist or not from the authenticaded user."]);
+		}
 	}
 
 

@@ -104,20 +104,6 @@ function errMessages(msgs,div) {
 function callModal(modal, ev) {
     id = $(ev.currentTarget).data('id');
     $('#modal'+modal).data('id', id );
-    // // its an Update Modal, so we need to fetch the contact
-    // if (modal == 'UM') {
-    //     doAjax('/contact/'+id+'/edit', 'GET', $('#form'+modal), '',
-    //         function(response) {
-    //             if (response[0] == 'ok') {
-    //                 // for each 'clearable' field in the form get the correct value from the AJAX response
-    //                 $('#form'+modal+' :input.clear').each( function(){
-    //                     $(this).val(response[1][$(this).attr('name')]);
-    //                 });
-    //             } else {
-    //                 errMessages(response[1],'#message'+modal);
-    //             }
-    //     });
-    // }
     $('#modal'+modal).modal([]);
 }
 
@@ -206,12 +192,41 @@ function closeButtonEditModal() {
 }
 
 function prepDeleteModal() {
+    id = $('#modalDelete').data('id');
+    // if the ajax request is not fast enough this will be what the end user
+    // will see in the modal Delete Box.
+    $("#bodyModalDelete").html('...');
+    doAjax('/contact/'+id+'/edit', 'GET', $('#modalDelete'), '', function(response) {
+        if (response[0] == 'ok') {
+            ef = extraFields(response[1]);
+            ef = ef.length ? ' '+ef : '';
+            console.log(response[1]);
+            $("#bodyModalDelete").html(
+                "<p>Do you really want to delete contact:<br/>"+
+                "<b>"+response[1]['name']+" "+response[1]['surname']+" "+
+                "&lt;"+response[1]['email']+"&gt;</b>, "+
+                "phone <b>"+response[1]['phone']+ef+"</b>?</p>"
+            );
+        } else {
+            errMessages(response[1],'#message'+modal);
+        }
+    });
+
 }
+
 
 function deleteButtonDeleteModal() {
-}
-
-function cancelButtonDeleteModal() {
+    id = $('#modalDelete').data('id');
+    doAjax('contact/'+id, 'POST', $('#modalDelete'), {_method: 'DELETE'},
+        function(response) {
+            if (response[0] == 'ok') {
+                doSearch(0);
+                $('#modalDelete').modal('hide');
+            } else {
+                errMessages(response[1],'#message'+modal);
+            }
+        });
+    return false;
 }
 
 
@@ -235,9 +250,8 @@ function page_setup() {
     $('#minusBtnUM').click(  function(ev) { extraFieldsModal(-1,'UM');                });
 
     // Delete Modal Events
-    $('#deleteModal').on('show.bs.modal', function (e) { prepDeleteModal(); });
-    $('#deleteBtnDM').click( function(ev) { deleteButtonDeleteModal();      });
-    $('#cancelBtnDM').click( function(ev) { cancelButtonDeleteModal();      });
+    $('#modalDelete').on('show.bs.modal', function (e) { prepDeleteModal();         });
+    $('#deleteBtn').click(                function(ev) { deleteButtonDeleteModal(); });
 }
 
 
