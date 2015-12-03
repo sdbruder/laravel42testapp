@@ -2,6 +2,13 @@
 
 class ContactsController extends \BaseController {
 
+	protected $rules = [
+		'name'      => 'required:min:3',
+		'surname'   => 'required:min:3',
+		'email'     => 'required|email',
+		'phone'     => 'required'
+	];
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -36,19 +43,13 @@ class ContactsController extends \BaseController {
 	 */
 	public function store()
 	{
-		$rules = [
-			'name'      => 'required:min:3',
-			'surname'   => 'required:min:3',
-			'email'     => 'required|email',
-			'phone'     => 'required'
-		];
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make(Input::all(), $this->rules);
 		if ($validator->fails()) {
-			return Response::json( ['error',$validator->messages()] );
+			return Response::json( ["error",$validator->messages()] );
 		} else {
 			$contact = new Contact(Input::all());
 			Auth::User()->contacts()->save($contact);
-			return Response::json( ['ok',''] );
+			return Response::json( ["ok",""] );
 		}
 	}
 
@@ -73,7 +74,12 @@ class ContactsController extends \BaseController {
 	 */
 	public function edit($id)
 	{
-		dd("edit contact $id");
+		$contact = Contact::findOrFail($id);
+		if ($contact->user->id == Auth::User()->id) {
+			return Response::json(["ok",$contact]);
+		} else {
+			return Response::json(["error","Contact doesn't exist or not from the authenticaded user."]);
+		}
 	}
 
 
@@ -85,7 +91,18 @@ class ContactsController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		dd("update contact $id");
+		$contact = Contact::findOrFail($id);
+		if ($contact->user->id == Auth::User()->id) {
+			$validator = Validator::make(Input::all(), $this->rules);
+			if ($validator->fails()) {
+				return Response::json( ["error",$validator->messages()] );
+			} else {
+				$contact->update(Input::all());
+				return Response::json(["ok",""]);
+			}
+		} else {
+			return Response::json(["error","Contact doesn't exist or not from the authenticaded user."]);
+		}
 	}
 
 

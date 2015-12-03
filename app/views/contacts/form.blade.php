@@ -1,7 +1,7 @@
 {{ Form::open([
     'id'     => "form{$modal}",
     'url'    => 'contact',
-    'method' => 'post',
+    'method' => "{$method}",
     'class'  => 'form-horizontal']) }}
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

@@ -91,6 +91,7 @@
     <div class="modal-content">
         @include('contacts.form', [
             'title'  => 'Insert Contact',
+            'method' => 'POST',
             'submit' => 'Create',
             'modal'  => 'IM']);
     </div><!-- /.modal-content -->
@@ -102,6 +103,7 @@
     <div class="modal-content">
         @include('contacts.form', [
             'title'  => 'Update Contact',
+            'method' => 'PUT',
             'submit' => 'Update',
             'modal'  => 'UM']);
     </div><!-- /.modal-content -->
@@ -109,7 +111,7 @@
 </div><!-- /.modal -->
 
 
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" data-id="0">
+<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" data-id="0">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

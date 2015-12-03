@@ -5,9 +5,9 @@
  */
 
 
-function doAjax(url, context, data, successFn) {
+function doAjax(url, method, context, data, successFn) {
     $.ajax({
-        type: 'POST',
+        type: method,
         url: url,
         context: $(context),
         headers: {
@@ -75,6 +75,7 @@ function tableIt(response) {
             "</tr>\n";
     });
     $('#tableBody').html(table_str);
+    table_setup(); // re-connect the table's per-row events
 }
 
 
@@ -83,7 +84,7 @@ var searchTimeout = null;
 function doSearch(time) {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(function(){
-        doAjax('/contact/search', $('#searchInput'), {search: $('#searchInput').val()},
+        doAjax('/contact/search', 'POST', $('#searchInput'), {search: $('#searchInput').val()},
         function(response) {
             tableIt(response);
         });
@@ -100,20 +101,71 @@ function errMessages(msgs,div) {
     $(div).removeClass('hidden');
 }
 
-function callModal(modalId, ev) {
-    $(modalId).data('id',  $(ev.currentTarget).data('id') );
-    $(modalId).modal([]);
+function callModal(modal, ev) {
+    id = $(ev.currentTarget).data('id');
+    $('#modal'+modal).data('id', id );
+    // // its an Update Modal, so we need to fetch the contact
+    // if (modal == 'UM') {
+    //     doAjax('/contact/'+id+'/edit', 'GET', $('#form'+modal), '',
+    //         function(response) {
+    //             if (response[0] == 'ok') {
+    //                 // for each 'clearable' field in the form get the correct value from the AJAX response
+    //                 $('#form'+modal+' :input.clear').each( function(){
+    //                     $(this).val(response[1][$(this).attr('name')]);
+    //                 });
+    //             } else {
+    //                 errMessages(response[1],'#message'+modal);
+    //             }
+    //     });
+    // }
+    $('#modal'+modal).modal([]);
 }
+
+// Ugly, there is a cleaner way of doing it ?
+function fixExtraFieldsVisibility(modal,ajaxData) {
+    // discover which is the last fieldN not empty.
+    lastField = 0;
+    for(i=5; i>0; i--) {
+        if (ajaxData['field'+i].length > 0) {
+            lastField = i;
+            break;
+        }
+    }
+    // fix it
+    for (var i = 1; i <= lastField; ++i) $('#field'+modal+i).removeClass('hidden');
+    $('#extraBtns'+modal).data('show', lastField);
+}
+
 
 function prepModal(modal) {
     $('#message'+modal).addClass('hidden');
     $('#form'+modal+' :input.clear').each( function(){ $(this).val(''); } );
     for (var i = 1; i <= 5; ++i) $('#field'+modal+i).addClass('hidden');
     $('#extraBtns'+modal).data('show', 0);
+    // its an Update Modal, so we need to fetch the contact
+    if (modal == 'UM') {
+        id = $('#modal'+modal).data('id');
+        doAjax('/contact/'+id+'/edit', 'GET', $('#form'+modal), '',
+            function(response) {
+                if (response[0] == 'ok') {
+                    // for each 'clearable' field in the form get the correct value from the AJAX response
+                    $('#form'+modal+' :input.clear').each( function(){
+                        $(this).val(response[1][$(this).attr('name')]);
+                    });
+                    fixExtraFieldsVisibility(modal,response[1]);
+                } else {
+                    errMessages(response[1],'#message'+modal);
+                }
+        });
+    }
+
 }
 
 function submitForm(url,modal) {
-    doAjax(url, $('#form'+modal), $('#form'+modal).serialize(),
+    if (modal=='UM') {
+        url += $('#modal'+modal).data('id');
+    }
+    doAjax(url, 'POST', $('#form'+modal), $('#form'+modal).serialize(),
         function(response) {
             if (response[0] == 'ok') {
                 doSearch(0);
@@ -162,14 +214,11 @@ function deleteButtonDeleteModal() {
 function cancelButtonDeleteModal() {
 }
 
-function contactIndex_setup() {
-    // setup all events -------------------------------------------------------
 
+function page_setup() {
     // Page events
-    $('#search-form').submit(function()  { return doSearch(0);            });
-    $('#searchInput').keyup(function()   { doSearch(700);                 });
-    $('.btnEdit').click(    function(ev) { callModal('#editModal',   ev); });
-    $('.btnDelete').click(  function(ev) { callModal('#deleteModal', ev); });
+    $('#search-form').submit(function()  { return doSearch(0);      });
+    $('#searchInput').keyup(function()   { doSearch(700);           });
 
     // Insert Modal Events
     $('#modalIM').on('show.bs.modal',  function (e) { prepModal('IM');          });
@@ -181,15 +230,28 @@ function contactIndex_setup() {
     // Update Modal Events
     $('#modalUM').on('show.bs.modal',  function (e) { prepModal('UM');                });
     $('#modalUM').on('shown.bs.modal', function (e) { $('#firstUM').focus();          });
-    $('#formUM').submit(     function(ev) { return submitForm('/contact/{$id}','UM'); });
-    $('#plusBtnUM').click(   function(ev) { extraFieldsModal(+1,'IM');                });
-    $('#minusBtnUM').click(  function(ev) { extraFieldsModal(-1,'IM');                });
+    $('#formUM').submit(     function(ev) { return submitForm('/contact/','UM'); });
+    $('#plusBtnUM').click(   function(ev) { extraFieldsModal(+1,'UM');                });
+    $('#minusBtnUM').click(  function(ev) { extraFieldsModal(-1,'UM');                });
 
     // Delete Modal Events
     $('#deleteModal').on('show.bs.modal', function (e) { prepDeleteModal(); });
-    $('#deleteBtnDM').click( function(ev) { deleteButtonDeleteModal(); });
-    $('#cancelBtnDM').click( function(ev) { cancelButtonDeleteModal(); });
+    $('#deleteBtnDM').click( function(ev) { deleteButtonDeleteModal();      });
+    $('#cancelBtnDM').click( function(ev) { cancelButtonDeleteModal();      });
+}
 
+
+function table_setup() {
+    // table's per-row events
+    $('.btnEdit').click(    function(ev) { callModal('UM',     ev); });
+    $('.btnDelete').click(  function(ev) { callModal('Delete', ev); });
+}
+
+
+function contactIndex_setup() {
+    // setup all events ----------
+    page_setup();   // Page events
+    table_setup(); // Table events
 }
 
 
