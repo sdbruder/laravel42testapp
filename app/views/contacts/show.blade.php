@@ -104,7 +104,9 @@
                 {{ Form::token() }}
                 <fieldset>
                     {{ Form::label('name', 'Name'); }}
-                    {{ Form::text('name', null, ['placeholder' => 'Enter Contact\'s Name',
+                    {{ Form::text('name', null, [
+                        'id' => 'firstIM',
+                        'placeholder' => 'Enter Contact\'s Name',
                         'class' => 'form-control clear']) }}
                     {{ Form::label('surname', 'Surname'); }}
                     {{ Form::text('surname', null, ['placeholder' => 'Enter Contact\'s Surname',

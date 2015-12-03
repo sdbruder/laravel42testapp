@@ -98,12 +98,10 @@ function callModal(modalId, ev) {
 }
 
 function prepInsertModal() {
-    console.log('prepInsertModal');
     $('#insertMessage').addClass('hidden');
     $('#formIM :input.clear').each( function(){ $(this).val(''); } );
     for (var i = 1; i <= 5; ++i) $('#fieldInsert'+i).addClass('hidden');
     $('#extraBtnsIM').data('show', 0);
-    console.log($('#formIM :input.clear'));
 }
 
 function insertButtonInsertModal() {
@@ -167,7 +165,9 @@ function contactIndex_setup() {
     $('.btnEdit').click(    function(ev) { callModal('#editModal',   ev);   });
     $('.btnDelete').click(  function(ev) { callModal('#deleteModal', ev);   });
 
-    $('#insertModal').on('show.bs.modal', function (e) { prepInsertModal(); });
+    $('#insertModal').on('show.bs.modal', function (e) { prepInsertModal(); $('#firstIM').focus(); });
+    $('#insertModal').on('shown.bs.modal', function (e) { $('#firstIM').focus(); });
+
     $('#insertBtnIM').click( function(ev) { insertButtonInsertModal(); });
     $('#formIM').submit(     function(ev) { return insertButtonInsertModal(); });
     $('#closeBtnIM').click(  function(ev) { closeButtonInsertModal();  });
