@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-md-12">
 
-                    <button id="addContact" class="btn btn-primary" data-toggle="modal" data-target="#insertModal">
+                    <button id="addContact" class="btn btn-primary" data-toggle="modal" data-target="#modalIM">
                         <span class="glyphicon glyphicon-plus"></span>
                         Add Contact
                     </button>
@@ -86,94 +86,24 @@
 @stop
 
 @section('after-content')
-<div class="modal fade" id="insertModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="modalIM" tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
-    {{ Form::open([
-        'id'     => 'formIM',
-        'url'    => 'contact',
-        'method' => 'post',
-        'class'  => 'form-horizontal']) }}
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Insert Contact</h4>
-      </div>
-      <div class="modal-body">
-        <div id="insertMessage" class="alert alert-danger hidden" role="alert"></div>
-
-                {{ Form::token() }}
-                <fieldset>
-                    {{ Form::label('name', 'Name'); }}
-                    {{ Form::text('name', null, [
-                        'id' => 'firstIM',
-                        'placeholder' => 'Enter Contact\'s Name',
-                        'class' => 'form-control clear']) }}
-                    {{ Form::label('surname', 'Surname'); }}
-                    {{ Form::text('surname', null, ['placeholder' => 'Enter Contact\'s Surname',
-                        'class' => 'form-control clear']) }}
-                    {{ Form::label('email', 'E-Mail Address'); }}
-                    {{ Form::text('email', null, ['placeholder' => 'Enter Contact\'s Email', 'class' => 'form-control clear']) }}
-                    {{ Form::label('phone', 'Phone'); }}
-                    {{ Form::text('phone', null, ['placeholder' => 'Enter Contact\'s Phone', 'class' => 'form-control clear']) }}
-                    {{ Form::label('extrabuttons', 'Extra Info'); }}
-                    <div
-                        id="extraBtnsIM"
-                        data-show="0" class="btn-group"
-                        role="group" aria-label=""
-                        style="margin-top: 5px; margin-bottom: 5px;">
-                        <button id="plusBtnIM"  type="button" class="btn btn-success">+</button>
-                        <button id="minusBtnIM" type="button" class="btn btn-danger" >-</button>
-                    </div>
-                    {{ Form::text('field1', null, [
-                        'id' => 'fieldInsert1',
-                        'placeholder' => 'Extra info',
-                        'class' => 'form-control clear hidden']) }}
-                    {{ Form::text('field2', null, [
-                        'id' => 'fieldInsert2',
-                        'placeholder' => 'Extra info',
-                        'class' => 'form-control clear hidden']) }}
-                    {{ Form::text('field3', null, [
-                        'id' => 'fieldInsert3',
-                        'placeholder' => 'Extra info',
-                        'class' => 'form-control clear hidden']) }}
-                    {{ Form::text('field4', null, [
-                        'id' => 'fieldInsert4',
-                        'placeholder' => 'Extra info',
-                        'class' => 'form-control clear hidden']) }}
-                    {{ Form::text('field5', null, [
-                        'id' => 'fieldInsert5',
-                        'placeholder' => 'Extra info',
-                        'class' => 'form-control clear hidden']) }}
-
-                    {{-- <div class="spacing"><br/></div> --}}
-                </fieldset>
-
-      </div>
-      <div class="modal-footer">
-        {{ Form::button('Close',  ['id' => 'closeBtnIM',  'class' => 'btn btn-default', 'data-dismiss' => 'modal']) }}
-        {{ Form::submit('Insert', ['id' => 'insertBtnIM', 'class' => 'btn btn-primary'])                            }}
-        {{-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Insert</button> --}}
-      </div>
-    {{ Form::close() }}
+        @include('contacts.form', [
+            'title'  => 'Insert Contact',
+            'submit' => 'Create',
+            'modal'  => 'IM']);
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" data-id="0">
+<div class="modal fade" id="modalUM" tabindex="-1" role="dialog" data-id="0">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Edit Contact</h4>
-      </div>
-      <div class="modal-body">
-        <p>One fine body&hellip;</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Update</button>
-      </div>
+        @include('contacts.form', [
+            'title'  => 'Update Contact',
+            'submit' => 'Update',
+            'modal'  => 'UM']);
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

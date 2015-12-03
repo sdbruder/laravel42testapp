@@ -105,40 +105,42 @@ function callModal(modalId, ev) {
     $(modalId).modal([]);
 }
 
-function prepInsertModal() {
-    $('#insertMessage').addClass('hidden');
-    $('#formIM :input.clear').each( function(){ $(this).val(''); } );
-    for (var i = 1; i <= 5; ++i) $('#fieldInsert'+i).addClass('hidden');
-    $('#extraBtnsIM').data('show', 0);
+function prepModal(modal) {
+    $('#message'+modal).addClass('hidden');
+    $('#form'+modal+' :input.clear').each( function(){ $(this).val(''); } );
+    for (var i = 1; i <= 5; ++i) $('#field'+modal+i).addClass('hidden');
+    $('#extraBtns'+modal).data('show', 0);
 }
 
-function insertButtonInsertModal() {
-    doAjax('/contact', $('#formIM'), $('#formIM').serialize(),
+function submitForm(url,modal) {
+    doAjax(url, $('#form'+modal), $('#form'+modal).serialize(),
         function(response) {
             if (response[0] == 'ok') {
                 doSearch(0);
-                $('#insertModal').modal('hide');
+                $('#modal'+modal).modal('hide');
             } else {
-                errMessages(response[1],'#insertMessage');
+                errMessages(response[1],'#message'+modal);
             }
         });
     return false;
 }
 
-function closeButtonInsertModal() {
-}
 
-function extraInsertModal(change) {
+function extraFieldsModal(change, modal) {
+    show = $('#extraBtns'+modal).data('show');
     if (change == 1) {
-        show = $('#extraBtnsIM').data('show');
-        show += 1;
-        $('#fieldInsert'+show).removeClass('hidden');
-        $('#extraBtnsIM').data('show', show);
+        if (show<5) {
+            show += 1;
+            $('#field'+modal+show).removeClass('hidden');
+            $('#extraBtns'+modal).data('show', show);
+        }
     } else {
-        show = $('#extraBtnsIM').data('show');
-        $('#fieldInsert'+show).addClass('hidden');
-        show -= 1;
-        $('#extraBtnsIM').data('show', show);
+        if (show>0) {
+            $('#field'+modal+show).val('');
+            $('#field'+modal+show).addClass('hidden');
+            show -= 1;
+            $('#extraBtns'+modal).data('show', show);
+        }
     }
 }
 
@@ -161,24 +163,29 @@ function cancelButtonDeleteModal() {
 }
 
 function contactIndex_setup() {
-    // setup all events
-    $('#search-form').submit(function()  { return doSearch(0);              });
-    $('#searchInput').keyup(function()   { doSearch(700);                   });
-    $('.btnEdit').click(    function(ev) { callModal('#editModal',   ev);   });
-    $('.btnDelete').click(  function(ev) { callModal('#deleteModal', ev);   });
+    // setup all events -------------------------------------------------------
 
-    $('#insertModal').on('show.bs.modal', function (e) { prepInsertModal();      });
-    $('#insertModal').on('shown.bs.modal', function (e) { $('#firstIM').focus(); });
+    // Page events
+    $('#search-form').submit(function()  { return doSearch(0);            });
+    $('#searchInput').keyup(function()   { doSearch(700);                 });
+    $('.btnEdit').click(    function(ev) { callModal('#editModal',   ev); });
+    $('.btnDelete').click(  function(ev) { callModal('#deleteModal', ev); });
 
-    $('#formIM').submit(     function(ev) { return insertButtonInsertModal(); });
-    $('#closeBtnIM').click(  function(ev) { closeButtonInsertModal();  });
-    $('#plusBtnIM').click(   function(ev) { extraInsertModal(+1);      });
-    $('#minusBtnIM').click(  function(ev) { extraInsertModal(-1);      });
+    // Insert Modal Events
+    $('#modalIM').on('show.bs.modal',  function (e) { prepModal('IM');          });
+    $('#modalIM').on('shown.bs.modal', function (e) { $('#firstIM').focus();    });
+    $('#formIM').submit(     function(ev) { return submitForm('/contact','IM'); });
+    $('#plusBtnIM').click(   function(ev) { extraFieldsModal(+1,'IM');          });
+    $('#minusBtnIM').click(  function(ev) { extraFieldsModal(-1,'IM');          });
 
-    $('#editModal').on(  'show.bs.modal', function (e) { prepEditModal();   });
-    $('#updateBtnEM').click( function(ev) { updateButtonEditModal(); });
-    $('#closeBtnEM').click(  function(ev) { closeButtonEditModal();  });
+    // Update Modal Events
+    $('#modalUM').on('show.bs.modal',  function (e) { prepModal('UM');                });
+    $('#modalUM').on('shown.bs.modal', function (e) { $('#firstUM').focus();          });
+    $('#formUM').submit(     function(ev) { return submitForm('/contact/{$id}','UM'); });
+    $('#plusBtnUM').click(   function(ev) { extraFieldsModal(+1,'IM');                });
+    $('#minusBtnUM').click(  function(ev) { extraFieldsModal(-1,'IM');                });
 
+    // Delete Modal Events
     $('#deleteModal').on('show.bs.modal', function (e) { prepDeleteModal(); });
     $('#deleteBtnDM').click( function(ev) { deleteButtonDeleteModal(); });
     $('#cancelBtnDM').click( function(ev) { cancelButtonDeleteModal(); });
