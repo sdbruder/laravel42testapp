@@ -102,17 +102,18 @@ class ContactsController extends \BaseController {
 
 
 	/**
-	 * 'asterisk' the search items to better FT search them.
+	 * Javascript code don't need to know details about MySQL's FTS.
+	 * 'asterisk' the search items to better FT search them and substitute @'s.
 	 *
 	 * @param  string  $search
 	 * @return JSON
 	 */
-	public function asteriskIt($words)
+	public function prepFTS($words)
 	{
 		$wordList = explode(' ',$words);
 		$searchList = [];
 		foreach($wordList as $w) {
-			$searchList[] = trim($w).'*';
+			$searchList[] = trim(str_replace('@', '.', $w)).'*';
 		}
 		return implode(' ',$searchList);
 	}
@@ -128,7 +129,7 @@ class ContactsController extends \BaseController {
 	{
 		$input = Input::all();
 		if (array_key_exists('search', $input) && $input['search']) {
-			$search = $this->asteriskIt($input['search']);
+			$search = $this->prepFTS($input['search']);
 			$contacts = Auth::User()->contacts()->whereRaw(
 				'MATCH (name, surname, email, phone, field1, field2, field3, field4, field5) AGAINST ("'.$search.'" IN BOOLEAN MODE)'
 				)->get()->toArray();
