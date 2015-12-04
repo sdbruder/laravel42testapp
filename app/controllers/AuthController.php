@@ -99,8 +99,8 @@ class AuthController extends \BaseController {
 	public function redirectToProvider($driver)
 	{
 		// $driver is all lowercase
-		// $oAuthDriver[$driver] has the proper case to load the correct driver.
-		$oa = OAuth::consumer( $oAuthDriver[$driver], url("/auth/$driver/callback") );
+		// $this->oAuthDriver[$driver] has the proper case to load the correct driver.
+		$oa = OAuth::consumer( $this->oAuthDriver[$driver], url("/auth/$driver/callback") );
 		// get provider authorization
 		$url = $oa->getAuthorizationUri();
 		// return to the provider login url
@@ -144,8 +144,8 @@ class AuthController extends \BaseController {
 	public function handleProviderCallback($driver)
 	{
 		// $driver is all lowercase
-		// $oAuthDriver[$driver] has the proper case to load the correct driver.
-		$oa = OAuth::consumer( $oAuthDriver[$driver], url("/auth/$driver/callback") );
+		// $this->oAuthDriver[$driver] has the proper case to load the correct driver.
+		$oa = OAuth::consumer( $this->oAuthDriver[$driver], url("/auth/$driver/callback") );
 		$code  = Input::get('code');
 		$state = Input::get('state');
 		if ($code) {
