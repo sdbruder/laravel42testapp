@@ -2,7 +2,11 @@
 
 @section('content')
     <div class="page-header">
-        <h1 class="logo">Contacts <small class="pull-right">{{Auth::User()->email }}</small></h1>
+        <h1 class="logo">Contacts
+            <small class="pull-right">
+                {{Auth::User()->email }}
+                <a href="/auth/logout" class="btn btn-danger btn-xs">Logout</a>
+            </small></h1>
     </div>
 
     <div class="panel panel-info">

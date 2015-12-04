@@ -49,6 +49,21 @@ class AuthController extends \BaseController {
 	}
 
 	/**
+	 * do Logout process.
+	 *
+	 * @return Response
+	 */
+	public function getLogout()
+	{
+		if (Auth::User()) {
+			Auth::logout();
+			return Redirect::to($this->loginURL)->with('message', 'User logged out.');
+		} else {
+			return Redirect::to($this->loginURL)->with('message', 'User not found or password incorrect.');
+		}
+	}
+
+	/**
 	 * do Register process.
 	 *
 	 * @return Response
