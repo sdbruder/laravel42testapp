@@ -8,6 +8,12 @@ class AuthController extends \BaseController {
 	// login URL.
 	public $loginURL = '/auth/login';
 
+	// insulate case sensitiveness from external factors (URLs and so on)
+	protected $oAuthDriver = [
+		'github'   => 'GitHub',
+		'facebook' => 'Facebook'
+	];
+
 	/**
 	 * get Login Form.
 	 *
@@ -92,11 +98,12 @@ class AuthController extends \BaseController {
 	 */
 	public function redirectToProvider($driver)
 	{
-		$oa = OAuth::consumer( $driver, url("/auth/$driver/callback") );
+		// $driver is all lowercase
+		// $oAuthDriver[$driver] has the proper case to load the correct driver.
+		$oa = OAuth::consumer( $oAuthDriver[$driver], url("/auth/$driver/callback") );
 		// get provider authorization
 		$url = $oa->getAuthorizationUri();
 		// return to the provider login url
-		Log::
 		return Redirect::to( (string)$url );
 	}
 
@@ -136,15 +143,17 @@ class AuthController extends \BaseController {
 	 */
 	public function handleProviderCallback($driver)
 	{
-		$oa = OAuth::consumer( $driver, url("/auth/$driver/callback") );
+		// $driver is all lowercase
+		// $oAuthDriver[$driver] has the proper case to load the correct driver.
+		$oa = OAuth::consumer( $oAuthDriver[$driver], url("/auth/$driver/callback") );
 		$code  = Input::get('code');
 		$state = Input::get('state');
 		if ($code) {
 			$token = $oa->requestAccessToken( $code ); // get the token
 
 			$idEmail = [
-				'Facebook' => function($oa) { return $this->getFacebookIdEmail($oa);},
-				'GitHub'   => function($oa) { return $this->getGithubIdEmail($oa);  },
+				'facebook' => function($oa) { return $this->getFacebookIdEmail($oa);},
+				'github'   => function($oa) { return $this->getGithubIdEmail($oa);  },
 			];
 			$result = $idEmail[$driver]($oa); // better than a ugly switch.
 

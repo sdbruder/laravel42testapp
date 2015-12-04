@@ -13,9 +13,9 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-5">
-                    <a href="/auth/GitHub" class="btn btn-info btn-lg btn-block btn-github">Login with Github</a>
+                    <a href="/auth/github" class="btn btn-info btn-lg btn-block btn-github">Login with Github</a>
                     <div class="spacing">&nbsp;</div>
-                    <a href="/auth/Facebook" class="btn btn-info btn-lg btn-block btn-fb">Login with Facebook</a>
+                    <a href="/auth/facebook" class="btn btn-info btn-lg btn-block btn-fb">Login with Facebook</a>
                 </div>
                 <div class="col-md-7" style="border-left:1px solid #ccc;height:190px">
                 {{ Form::open([
