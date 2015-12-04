@@ -96,6 +96,7 @@ class AuthController extends \BaseController {
 		// get provider authorization
 		$url = $oa->getAuthorizationUri();
 		// return to the provider login url
+		Log::
 		return Redirect::to( (string)$url );
 	}
 
@@ -143,7 +144,7 @@ class AuthController extends \BaseController {
 
 			$idEmail = [
 				'Facebook' => function($oa) { return $this->getFacebookIdEmail($oa);},
-				'github'   => function($oa) { return $this->getGithubIdEmail($oa);  },
+				'GitHub'   => function($oa) { return $this->getGithubIdEmail($oa);  },
 			];
 			$result = $idEmail[$driver]($oa); // better than a ugly switch.
 
