@@ -13,7 +13,7 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-5">
-                    <a href="/auth/github" class="btn btn-info btn-lg btn-block btn-github">Login with Github</a>
+                    <a href="/auth/GitHub" class="btn btn-info btn-lg btn-block btn-github">Login with Github</a>
                     <div class="spacing">&nbsp;</div>
                     <a href="/auth/Facebook" class="btn btn-info btn-lg btn-block btn-fb">Login with Facebook</a>
                 </div>
