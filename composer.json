@@ -8,7 +8,8 @@
 		"components/jquery": "^2.1",
 		"artdarek/oauth-4-laravel": "dev-master",
 		"pda/pheanstalk": "~2.1",
-		"evodelavega/activecampaign-api-php": "dev-master"
+		"evodelavega/activecampaign-api-php": "dev-master",
+		"cebe/markdown": "^1.1"
 	},
 	"autoload": {
 		"classmap": [

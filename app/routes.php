@@ -2,7 +2,10 @@
 
 Route::get('/', function()
 {
-	return View::make('pages.home');
+    $markdown_parser = new \cebe\markdown\GithubMarkdown();
+    $md = file_get_contents(base_path() . '/NOTES.md');
+    $notes = $markdown_parser->parse( $md );
+	return View::make('pages.home')->with('notes', $notes);
 });
 
 // Authentication routes

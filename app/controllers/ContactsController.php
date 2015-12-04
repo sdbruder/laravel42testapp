@@ -18,7 +18,7 @@ class ContactsController extends \BaseController {
 	{
 		if (Auth::User()) {
 			$contacts = Auth::User()->contacts()->get();
-			return View::make('contacts.show')->with('contacts',$contacts);
+			return View::make('contacts.show')->with('contacts', $contacts);
 		} else {
 			return Redirect::to('/auth/login')->with('message', 'You need to be logged in to view contacts');
 		}
@@ -77,9 +77,9 @@ class ContactsController extends \BaseController {
 	{
 		$contact = Contact::findOrFail($id);
 		if ($contact->user->id == Auth::User()->id) {
-			return Response::json(["ok",$contact]);
+			return Response::json(["ok", $contact]);
 		} else {
-			return Response::json(["error","Contact doesn't exist or not from the authenticaded user."]);
+			return Response::json(["error", "Contact doesn't exist or not from the authenticaded user."]);
 		}
 	}
 
@@ -100,10 +100,10 @@ class ContactsController extends \BaseController {
 			} else {
 				$contact->update(Input::all());
 				Queue::push('activeCampaignWorker@updateProcess', $contact);
-				return Response::json(["ok",""]);
+				return Response::json(["ok", ""]);
 			}
 		} else {
-			return Response::json(["error","Contact doesn't exist or not from the authenticaded user."]);
+			return Response::json(["error", "Contact doesn't exist or not from the authenticaded user."]);
 		}
 	}
 
@@ -122,7 +122,7 @@ class ContactsController extends \BaseController {
 			Queue::push('activeCampaignWorker@deleteProcess', $contact);
 			return Response::json(["ok",""]);
 		} else {
-			return Response::json(["error","Contact doesn't exist or not from the authenticaded user."]);
+			return Response::json(["error", "Contact doesn't exist or not from the authenticaded user."]);
 		}
 	}
 
@@ -136,12 +136,12 @@ class ContactsController extends \BaseController {
 	 */
 	public function prepFTS($words)
 	{
-		$wordList = explode(' ',$words);
+		$wordList = explode(' ', $words);
 		$searchList = [];
 		foreach($wordList as $w) {
 			$searchList[] = trim(str_replace('@', '.', $w)).'*';
 		}
-		return implode(' ',$searchList);
+		return implode(' ', $searchList);
 	}
 
 

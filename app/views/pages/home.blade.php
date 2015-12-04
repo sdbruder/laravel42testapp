@@ -13,13 +13,12 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-12">
-                    <p>Nullam quis risus eget urna mollis ornare vel eu leo. Nulla vitae elit libero, a pharetra augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna mollis euismod.</p>
                     <h4><a href="/auth/login">Login page</a></h4>
-                    <h4><a href="/auth/logout">Logout page</a></h4>
                     <h4><a href="/contact">Contacts page</a></h4>
                     @if (Auth::check())
                         <p>
                             <b>Authenticated user:</b> {{ Auth::user()->email }}
+                            by {{ Auth::user()->provider }}
                         </p>
                     @else
                         <p>
@@ -29,6 +28,16 @@
                 </div>
             </div>
             @include('partials.message')
+        </div>
+    </div>
+
+    <div class="panel panel-info">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    {{ $notes }}
+                </div>
+            </div>
         </div>
     </div>
 </div>
