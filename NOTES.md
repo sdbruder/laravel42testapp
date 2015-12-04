@@ -58,5 +58,14 @@ in the search.
 
 - The ActiveCampaign API appears to be quite fragile, to say the least.
 
+- I've got bitten by a late bug when deploying in the t1.micro: github auth was
+working in dev environment and not working in production. After a series of
+scratch-head moments I've figured out: Even using homestead in my dev
+environment the files are been accessed / served by a Mac OS file system with no
+case sensitiveness, so a minor difference in the github driver OAuth naming was
+breaking it all. After that a series of commits that better serve as an example
+of the worst way to fix a bug in production went on, commits without any testing
+in the dev environment, etcetera. Bug fixed and Lesson learned.
+
 
 Any doubts (or errors found) please contact me.
