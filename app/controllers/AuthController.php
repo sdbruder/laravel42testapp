@@ -55,7 +55,7 @@ class AuthController extends \BaseController {
 	 */
 	public function doRegister($input)
 	{
-		if (User::where('email', '=', $input['email'])->count() == 0) {
+		if (User::where('provider_id', '=', $input['email'])->where('provider', '=', 'email')->count() == 0) {
 			$user = User::create([
 				'email'       => $input['email'],
 				'password'    => Hash::make($input['password']),
@@ -137,19 +137,15 @@ class AuthController extends \BaseController {
 				Auth::loginUsingId($user[0]['id']);
 				return Redirect::to($this->redirectTo);
 			} else {
-				if (User::where('email', '=', $result['email'])->count() == 0) {
-					$user = User::create([
-						'email'       => $result['email'],
-						'provider'    => $driver,
-						'provider_id' => $result['id'],
-						'token'       => $token->getAccessToken()
-					]);
-					$user->save();
-					Auth::login($user);
-					return Redirect::to($this->redirectTo);
-				} else {
-					return Redirect::to($this->loginURL)->with('message', 'User with the same email already exists.');
-				}
+				$user = User::create([
+					'email'       => $result['email'],
+					'provider'    => $driver,
+					'provider_id' => $result['id'],
+					'token'       => $token->getAccessToken()
+				]);
+				$user->save();
+				Auth::login($user);
+				return Redirect::to($this->redirectTo);
 			}
 		} else {
 			return Redirect::to($this->loginURL)->with('message', 'OAuth login attempt without corresponding code.');
