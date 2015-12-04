@@ -7,7 +7,8 @@
 		"laravel/framework": "4.2.*",
 		"components/jquery": "^2.1",
 		"artdarek/oauth-4-laravel": "dev-master",
-		"pda/pheanstalk": "~2.1"
+		"pda/pheanstalk": "~2.1",
+		"evodelavega/activecampaign-api-php": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

@@ -16,6 +16,7 @@ class CreateContactsTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('user_id')->unsigned()->references('id')->on('users')->onDelete('cascade');
+			$table->integer('ac_subscriber_id')->unsigned()->unique()->nullable();
 			$table->string('name');
 			$table->string('surname');
 			$table->string('email');

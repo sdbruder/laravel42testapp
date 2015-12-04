@@ -28,4 +28,9 @@ return array(
 		'secret' => '',
 	),
 
+	'activecampaign' => array(
+		'url'    => 'https://bruder.api-us1.com',
+		'apiKey' => '9a6f8141142104659fac484f71cdf2eb193fb2a473a9f900a73977915a2b7ee16ef1e8c8'
+	),
+
 );
