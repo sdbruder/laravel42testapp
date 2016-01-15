@@ -15,7 +15,7 @@ needs to be coded with Laravel 4.2 and Bootstrap 3.
 Here's the test:
 
 Create a simple name+email registration/login page, with GitHub / FaceBook
-connect buttons (the facebook ID of the test evaluator is hector.yague.14).
+connect buttons 
 Users signing up will be added into a database.
 
 Upon login, users will see a Contacts Page with the list of contacts within
@@ -71,7 +71,3 @@ and provide me with a login.  This way I can see your deployment methods.
 Please don't hesitate to contact me if you have any questions.
 
 Thank you very much and GOOD LUCK!
---
-Gideon Marcus
-Director of Operations
-Genesis Digital, LLC
